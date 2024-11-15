@@ -4,7 +4,8 @@ export const eventsMock: IEvent[] = [
   {
     id: "1",
     title: "Team Meeting",
-    description: "Monthly sync-up meeting with the team.",
+    description:
+      "Monthly sync-up meeting with the team. Monthly sync-up meeting with the team. ,Monthly sync-up meeting with the team.Monthly sync-up meeting with the team.Monthly sync-up meeting with the team.",
     date: "2024-11-05T10:00:00Z",
     time: "10:00",
     location: "Zoom",

@@ -11,7 +11,8 @@ interface Props {
 }
 
 const CalendarDay: React.FC<Props> = ({ day }) => {
-  const { monthIndex, filteredMonthEvents } = useCalendarContext();
+  const { monthIndex, filteredMonthEvents, setSelectedDay, handleOpenModal } =
+    useCalendarContext();
   const [dayEvents, setDayEvents] = useState<IEvent[]>([]);
 
   useEffect(() => {
@@ -39,8 +40,16 @@ const CalendarDay: React.FC<Props> = ({ day }) => {
     return dayEvents.length > 0 ? "calendar-day-events" : "";
   }
 
+  const handleClick = () => {
+    setSelectedDay(day);
+    handleOpenModal();
+  };
+
   return (
-    <div className={`calendar-day ${getInactiveDayClass()}`}>
+    <div
+      className={`calendar-day ${getInactiveDayClass()}`}
+      onClick={handleClick}
+    >
       <div className={`calendar-day-header ${getEventsClass()}`}>
         <p className={`calendar-day-number ${getCurrentDayClass()}`}>
           {day.format("DD")}

@@ -74,21 +74,19 @@ const CalendarDayContent: React.FC<CalendarDayContentProps> = ({
               display="flex"
               alignItems="center"
               sx={{
-                marginBottom: "2.25px",
+                marginBottom: "3.5px",
               }}
             >
-              <Circle
-                sx={{
-                  width: "8px",
-                  height: "8px",
-                  color: isCompleted(event.date) ? "#8B0000" : "#52b752",
-                  marginRight: "2px",
-                }}
-              />
               <Typography
                 sx={{
+                  width: "100%",
+                  bgcolor: isCompleted(event.date)
+                    ? theme.palette.custom.red200
+                    : theme.palette.custom.indigo200,
                   fontSize: "0.7rem",
+                  borderRadius: "0.2rem",
                   whiteSpace: "nowrap",
+                  overflow: "hidden",
                   textOverflow: "ellipsis",
                 }}
               >
