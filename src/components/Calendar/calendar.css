@@ -1,0 +1,19 @@
+.calendar-container {
+  max-width: 800px;
+  padding: 1rem;
+  margin-top: 2rem;
+  background-color: white;
+  border-radius: 1rem;
+}
+
+.header-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+.day-header {
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-align: center;
+}

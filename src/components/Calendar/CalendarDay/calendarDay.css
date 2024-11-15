@@ -1,0 +1,70 @@
+.calendar-day {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.5rem;
+  max-width: 100px;
+  transition: all 0.2s ease-in-out;
+}
+
+.calendar-day:hover {
+  background-color: #f1f6ff;
+}
+
+.inactive-day {
+  color: #a1a1a1;
+  background-color: #f9f9f9;
+}
+
+.calendar-day-header {
+  display: flex;
+  padding: 0.25rem;
+}
+
+.calendar-day-events {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.calendar-day-number {
+  font-size: 0.875rem;
+  font-weight: bold;
+  padding: 0.2rem;
+  margin: 0;
+}
+
+.current-day {
+  background-color: #2563eb;
+  border-radius: 100%;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .calendar-day {
+    max-width: 100px;
+    padding: 0rem;
+    aspect-ratio: 1 / 1;
+  }
+
+  .calendar-day-number {
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+
+  .calendar-day-events {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar-day {
+    max-width: 80px;
+    /* pad33ding: 0.2rem; */
+    aspect-ratio: 1 / 1;
+  }
+
+  .calendar-day-number {
+    font-size: 9px;
+    font-weight: bold;
+  }
+}
