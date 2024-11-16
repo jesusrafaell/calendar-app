@@ -9,12 +9,13 @@ import React, {
 import dayjs from "dayjs";
 import { IEvent } from "../types/events";
 import { eventsMock } from "../utils/mockEvents";
+import { ModeCalendar } from "../types/calendar";
 
 interface CalendarContextProps {
   monthIndex: number;
   setMonthIndex: (index: number) => void;
-  selectedDay: dayjs.Dayjs | null;
-  setSelectedDay: (day: dayjs.Dayjs | null) => void;
+  selectedDay: dayjs.Dayjs;
+  setSelectedDay: (day: dayjs.Dayjs) => void;
   selectedEvent: IEvent | null;
   setSelectedEvent: (event: IEvent | null) => void;
   getEvents: (day: dayjs.Dayjs) => IEvent[];
@@ -22,6 +23,9 @@ interface CalendarContextProps {
   updateEvent: (updatedEvent: IEvent) => void;
   deleteEvent: (id: string) => void;
   filteredMonthEvents: IEvent[];
+  mode: ModeCalendar;
+  setMode: (mode: ModeCalendar) => void;
+  handleShowDay: (day: dayjs.Dayjs) => void;
   //modal
   modalOpen: boolean;
   handleOpenModal: () => void;
@@ -31,7 +35,7 @@ interface CalendarContextProps {
 const CalendarContext = createContext<CalendarContextProps>({
   monthIndex: 0,
   setMonthIndex: () => {},
-  selectedDay: null,
+  selectedDay: dayjs(),
   setSelectedDay: () => {},
   selectedEvent: null,
   setSelectedEvent: () => {},
@@ -40,6 +44,9 @@ const CalendarContext = createContext<CalendarContextProps>({
   deleteEvent: () => {},
   updateEvent: () => {},
   filteredMonthEvents: [],
+  mode: "month",
+  handleShowDay: () => {},
+  setMode: () => {},
   modalOpen: false,
   handleOpenModal: () => {},
   handleCloseModal: () => {},
@@ -58,10 +65,11 @@ export const CalendarProvider: React.FC<CalendarProviderProps> = ({
   children,
 }) => {
   const [monthIndex, setMonthIndex] = useState<number>(dayjs().month());
-  const [selectedDay, setSelectedDay] = useState<dayjs.Dayjs | null>(null);
+  const [selectedDay, setSelectedDay] = useState<dayjs.Dayjs>(dayjs());
   const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
   const [events, setEvents] = useState<IEvent[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [mode, setModeState] = useState<ModeCalendar>("month");
 
   const filteredMonthEvents = useMemo(() => {
     return events
@@ -85,6 +93,35 @@ export const CalendarProvider: React.FC<CalendarProviderProps> = ({
   useEffect(() => {
     setEvents(eventsMock);
   }, []);
+
+  const setMode = (newMode: ModeCalendar) => {
+    if (newMode === "month") {
+      if (monthIndex === dayjs().month()) {
+        setSelectedDay(dayjs());
+      } else {
+        setSelectedDay(dayjs(new Date(dayjs().year(), monthIndex, 1)));
+      }
+    }
+
+    if (newMode === "week") {
+      if (selectedDay.month() !== monthIndex) {
+        setSelectedDay(dayjs(new Date(dayjs().year(), monthIndex, 1)));
+      }
+    }
+
+    if (newMode === "day") {
+      if (selectedDay.month() !== monthIndex) {
+        setSelectedDay(dayjs(new Date(dayjs().year(), monthIndex, 1)));
+      }
+    }
+
+    setModeState(newMode);
+  };
+
+  const handleShowDay = (day: dayjs.Dayjs) => {
+    setSelectedDay(day);
+    setMode("day");
+  };
 
   const getEvents = (day: dayjs.Dayjs) => {
     const filteredEvents = filteredMonthEvents.filter((event) => {
@@ -134,6 +171,9 @@ export const CalendarProvider: React.FC<CalendarProviderProps> = ({
         updateEvent,
         deleteEvent,
         filteredMonthEvents,
+        mode,
+        handleShowDay,
+        setMode,
         modalOpen,
         handleOpenModal,
         handleCloseModal,

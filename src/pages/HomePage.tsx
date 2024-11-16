@@ -7,6 +7,9 @@ const HomePage: React.FC = () => {
     <CalendarProvider>
       <div
         style={{
+          // display: "flex",
+          // justifyContent: "end",
+          // alignItems: "end",
           padding: "1rem",
         }}
       >

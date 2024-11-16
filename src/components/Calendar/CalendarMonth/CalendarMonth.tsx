@@ -1,7 +1,8 @@
 import React from "react";
-import Day from "../CalendarDay/CalendarDays";
 import dayjs from "dayjs";
-import "./calendarMonth.css";
+import { Box } from "@mui/material";
+import CalendarDay from "../CalendarDay";
+import { gridTemplateColumns } from "../../../utils/theme/theme";
 
 interface Props {
   month: dayjs.Dayjs[][];
@@ -9,15 +10,26 @@ interface Props {
 
 const Month: React.FC<Props> = ({ month }) => {
   return (
-    <div className="contairner-month">
+    <Box
+      sx={{
+        display: "grid",
+        flex: 1,
+        gap: "0.5rem",
+        width: "100%",
+        gridTemplateColumns: gridTemplateColumns.base,
+        "@media (max-width: 768px)": {
+          gridTemplateColumns: gridTemplateColumns.sm,
+        },
+      }}
+    >
       {month.map((row, i) => (
         <React.Fragment key={i}>
           {row.map((day, index) => (
-            <Day key={index} day={day} rowIdx={i} />
+            <CalendarDay key={index} day={day} />
           ))}
         </React.Fragment>
       ))}
-    </div>
+    </Box>
   );
 };
 

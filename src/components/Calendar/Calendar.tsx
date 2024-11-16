@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Month from "./CalendarMonth/CalendarMonth";
-import "./calendar.css";
 import { getMonth } from "../../utils/getMonth";
 import CalendarHeader from "./CalendarHeader/CalendarHeader";
 import { useCalendarContext } from "../../context/CalendarContext";
-import { useMediaQuery } from "@mui/material";
-import theme from "../../utils/theme/theme";
-import EventModal from "../EventModal/EventModal";
+import { Box, useMediaQuery } from "@mui/material";
+import theme, { gridTemplateColumns } from "../../utils/theme/theme";
+import Week from "./CalendarWeek/CalendarWeek";
+import { ModeCalendar } from "../../types/calendar";
+import CalendarDay from "./CalendarDay";
+import AddEvent from "../EventModal/AddEvent";
+import CustomModal from "../CustomModal";
 
 const daysOfWeek = [
   "Sunday",
@@ -21,7 +24,7 @@ const daysOfWeek = [
 const Calendar: React.FC = () => {
   const [currenMonth, setCurrentMonth] = useState(getMonth());
 
-  const { monthIndex, selectedDay, modalOpen, handleCloseModal } =
+  const { monthIndex, selectedDay, modalOpen, handleCloseModal, mode } =
     useCalendarContext();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -30,21 +33,68 @@ const Calendar: React.FC = () => {
     setCurrentMonth(getMonth(monthIndex));
   }, [monthIndex]);
 
+  const getCalendar = (mode: ModeCalendar) => {
+    switch (mode) {
+      case "day":
+        return <CalendarDay day={selectedDay} />;
+      case "week":
+        return <Week />;
+      default:
+        return <Month month={currenMonth} />;
+    }
+  };
+
   return (
     <>
-      <div className="calendar-container">
+      <Box
+        sx={{
+          // width: "800px",
+          // minHeight: "750px",
+          minWidth: "370px",
+          maxWidth: "800px",
+          padding: "1rem",
+          marginTop: "2rem",
+          backgroundColor: "white",
+          borderRadius: "1rem",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+        }}
+      >
         <CalendarHeader />
-        <div className="header-days">
+        <Box
+          sx={{
+            display: "grid",
+            marginBottom: "1rem",
+            width: "100%",
+            marginTop: "0.5rem",
+            gridTemplateColumns: gridTemplateColumns.base,
+            "@media (max-width: 768px)": {
+              gridTemplateColumns: gridTemplateColumns.sm,
+            },
+            gap: "0.5rem",
+            opacity: mode === "day" ? 0 : 1,
+            pointerEvents: mode === "day" ? "none" : "auto",
+            transition: "opacity 0.3s ease",
+          }}
+        >
           {daysOfWeek.map((day, index) => (
-            <p key={index} className="day-header">
+            <Box
+              key={index}
+              sx={{
+                fontSize: "0.85rem",
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
               {isMobile ? day[0] : day}
-            </p>
+            </Box>
           ))}
-        </div>
-        <Month month={currenMonth} />
-      </div>
+        </Box>
+        {getCalendar(mode)}
+      </Box>
       {selectedDay && (
-        <EventModal open={modalOpen} onClose={handleCloseModal} />
+        <CustomModal open={modalOpen} onClose={handleCloseModal}>
+          <AddEvent />
+        </CustomModal>
       )}
     </>
   );

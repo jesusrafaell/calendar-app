@@ -209,4 +209,13 @@ export const eventsMock: IEvent[] = [
     location: "Zoom",
     userId: "456",
   },
+  {
+    id: "24",
+    title: "Morning Stand-up 2",
+    description: "Daily morning stand-up meeting.",
+    date: "2024-11-12T09:00:00Z",
+    time: "09:00",
+    location: "Office",
+    userId: "123",
+  },
 ];

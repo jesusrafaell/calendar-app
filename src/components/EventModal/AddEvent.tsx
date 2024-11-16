@@ -13,12 +13,9 @@ import dayjs from "dayjs";
 import { IEvent } from "../../types/events";
 import { useCalendarContext } from "../../context/CalendarContext";
 
-interface AddEventProps {
-  onBack: () => void;
-}
-
-const AddEvent: React.FC<AddEventProps> = ({ onBack }) => {
-  const { selectedDay, addEvent } = useCalendarContext();
+const AddEvent: React.FC = () => {
+  const { selectedDay, addEvent, handleCloseModal, setSelectedDay } =
+    useCalendarContext();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
@@ -46,15 +43,18 @@ const AddEvent: React.FC<AddEventProps> = ({ onBack }) => {
     };
 
     addEvent(newEvent);
-    onBack();
+    setSelectedDay(dayjs(date));
+    handleCloseModal();
   };
 
   return (
     <Fade in timeout={500}>
       <StyledContainer>
-        <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
-          Add New Event
-        </Typography>
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1, mt: -3 }}>
+            {dayjs(date).format("DD MMMM, YYYY")}
+          </Typography>
+        </Box>
         <TextField
           label="Title"
           placeholder="Enter the title of the event"
@@ -121,14 +121,12 @@ const AddEvent: React.FC<AddEventProps> = ({ onBack }) => {
 };
 
 const StyledContainer = styled(Box)(({ theme }) => ({
-  maxHeight: "70vh",
-  overflowY: "auto",
-  overflowX: "hidden",
   display: "flex",
   flexDirection: "column",
+  paddingLeft: "2rem",
+  paddingRight: "2rem",
+  paddingBottom: "2rem",
   gap: "1.5rem",
-  padding: "2rem",
-  backgroundColor: theme.palette.background.default,
   scrollbarWidth: "none",
   "&::-webkit-scrollbar": {
     display: "none",
